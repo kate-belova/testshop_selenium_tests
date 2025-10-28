@@ -46,10 +46,12 @@ class BasePage:
 
     @staticmethod
     def assert_products_count(actual, expected):
+        actual_int = int(actual) if isinstance(actual, str) else actual
+        expected_int = int(expected) if isinstance(expected, str) else expected
+
         assert (
-            actual == expected,
-            f'Products count should be {expected}, but got {actual}',
-        )
+            actual_int == expected_int
+        ), f'Products count should be {expected_int}, but got {actual_int}'
 
     @staticmethod
     def assert_search_counter_and_actual_amount_found(

@@ -5,6 +5,8 @@ import pytest
 from test_data import (
     search_words, sort_indexes, sort_verifications, price_test_data
 )
+
+
 # fmt: on
 
 
@@ -25,18 +27,14 @@ class TestDesksPage:
 
     @allure.feature('Categories')
     @allure.story('Desks category')
-    @allure.title('Successfully filter by price')
+    @allure.title('Successfully filter by max price')
     @pytest.mark.smoke
-    @pytest.mark.parametrize(
-        'min_price, max_price, expected_count', price_test_data
-    )
-    def test_filter_desks_by_price_range(
-        self, desks_page, min_price, max_price, expected_count
+    @pytest.mark.parametrize('max_price, expected_count', price_test_data)
+    def test_filter_desks_by_max_price(
+        self, desks_page, max_price, expected_count
     ):
         desks_page.open_desks_page()
-        desks_page.change_slider_price_range(
-            min_price=min_price, max_price=max_price
-        )
+        desks_page.change_slider_max_price(max_price=max_price)
         desks_page.assert_found_desks_count(expected_count)
 
     @allure.feature('Categories')

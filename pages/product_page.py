@@ -121,9 +121,7 @@ class ProductPage(BasePage):
         while current_quantity < quantity:
             previous_quantity = current_quantity
             self.plus_button.click()
-            self.wait.until(
-                lambda driver: int(self.product_quantity) > previous_quantity
-            )
+            self.wait_for_quantity_load(previous_quantity)
             current_quantity = int(self.product_quantity)
 
     @allure.step('Assert Add to cart button is active')
@@ -143,9 +141,14 @@ class ProductPage(BasePage):
         self.assert_element_is_displayed_and_enabled(self.plus_button)
         self.assert_element_is_displayed_and_enabled(self.minus_button)
 
+        initial_quantity = int(self.product_quantity)
+
         self.minus_button.click()
+        self.wait_for_quantity_load(initial_quantity, 'decrease')
         self.assert_product_quantity()
+
         self.plus_button.click()
+        self.wait_for_quantity_load(initial_quantity)
         self.assert_product_quantity(expected_quantity=2)
 
     @allure.step('Assert product title and price')
@@ -186,3 +189,17 @@ class ProductPage(BasePage):
     @allure.step('Click Add to cart button')
     def click_add_to_cart_button(self):
         self.add_to_cart_button.click()
+
+    def wait_for_quantity_load(
+        self, initial_quantity, expected_direction='increase'
+    ):
+        if expected_direction == 'increase':
+            self.wait.until(
+                lambda driver: int(self.product_quantity) > initial_quantity
+            )
+        elif expected_direction == 'decrease':
+            if initial_quantity != 1:
+                self.wait.until(
+                    lambda driver: int(self.product_quantity)
+                    < initial_quantity
+                )

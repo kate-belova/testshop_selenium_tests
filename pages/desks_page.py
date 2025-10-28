@@ -129,34 +129,17 @@ class DesksPage(BasePage):
             f'Expected: {sorted_prices}, Actual: {prices}'
         )
 
-    @allure.step('Set comfortable price range on price slider')
-    def change_slider_price_range(self, min_price=None, max_price=None):
-        current_values = self.price_slider.get_attribute('value').split(',')
-        current_min = float(current_values[0])
-        current_max = float(current_values[1])
-
-        if min_price is not None and min_price != current_min:
-            self.move_left_thumb(min_price)
+    @allure.step('Set comfortable max price on price slider')
+    def change_slider_max_price(self, max_price=None):
+        current_price_values = self.price_slider.get_attribute('value').split(
+            ','
+        )
+        current_max = float(current_price_values[1])
 
         if max_price is not None and max_price != current_max:
             self.move_right_thumb(max_price)
 
         self.wait_for_desks_reload()
-
-    def move_left_thumb(self, min_price):
-        slider_min = float(self.price_slider.get_attribute('min'))
-        slider_max = float(self.price_slider.get_attribute('max'))
-        width = self.price_slider.size['width']
-
-        position_ratio = (min_price - slider_min) / (slider_max - slider_min)
-        target_pixels = width * position_ratio
-
-        self.actions.move_to_element(self.price_slider)
-        self.actions.move_by_offset(-width / 2, 0)
-        self.actions.click_and_hold()
-        self.actions.move_by_offset(target_pixels, 0)
-        self.actions.release()
-        self.actions.perform()
 
     def move_right_thumb(self, max_price):
         slider_min = float(self.price_slider.get_attribute('min'))

@@ -2,7 +2,7 @@ product_index = 2
 products_indexes = [10, 11]
 
 search_words = ['desk', 'corner', 'table', 'screen']
-price_test_data = [(100, 1000, 4), (150, 2000, 4), (500, 3000, 4)]
+price_test_data = [(1000, 5), (2000, 6), (3000, 8)]
 products_test_data = [(0, 5, 235.00), (2, 5, 602.50)]
 
 sort_indexes = [2, 3, 4]
