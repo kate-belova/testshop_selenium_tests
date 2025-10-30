@@ -149,6 +149,10 @@ class ProductPage(BasePage):
         self.wait_for_quantity_load(initial_quantity)
         self.assert_product_quantity(expected_quantity=2)
 
+        self.minus_button.click()
+        self.wait_for_quantity_load(2, 'decrease')
+        self.assert_product_quantity(expected_quantity=initial_quantity)
+
     @allure.step('Assert product title and price')
     def assert_product_title_and_price(self, expected_title, expected_price):
         actual_title = self.product_title
