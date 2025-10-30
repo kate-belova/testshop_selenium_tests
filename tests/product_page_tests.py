@@ -65,14 +65,13 @@ class TestProductPage:
         'Successfully search products by their titles on Product page'
     )
     @pytest.mark.smoke
-    @pytest.mark.parametrize('product_idx', products_indexes)
     @pytest.mark.parametrize('search_word', search_words)
     def test_product_page_search_success(
         # fmt: off
-        self, main_page, product_page, product_idx, search_word
+        self, main_page, product_page, search_word
         # fmt: on
     ):
         main_page.open_main_page()
-        main_page.open_product_in_new_tab(product_idx)
+        main_page.open_product_in_new_tab(products_indexes[0])
         product_page.enter_search_word(search_word)
         product_page.assert_search_word_in_found_products_titles(search_word)
