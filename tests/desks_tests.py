@@ -5,8 +5,6 @@ import pytest
 from test_data import (
     search_words, sort_indexes, sort_verifications, price_test_data
 )
-
-
 # fmt: on
 
 

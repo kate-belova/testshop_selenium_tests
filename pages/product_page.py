@@ -21,9 +21,7 @@ class ProductPage(BasePage):
             '.text-muted.mb-0',
         )
         self.terms_and_conditions_title_expected = 'Terms and Conditions'
-        self.terms_and_conditions_link_expected = (
-            'http://testshop.qa-practice.com/terms'
-        )
+        self.terms_and_conditions_link_expected = f'{self.base_url}terms'
         self.terms_and_conditions_texts_expected = (
             '30-day money-back guarantee\nShipping: 2-3 Business Days'
         )
