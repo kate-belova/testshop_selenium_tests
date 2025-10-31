@@ -1,4 +1,4 @@
-name: testshop.qa-practice.com tests
+name: testshop.qa-practice.com selenium tests
 
 on:
   workflow_dispatch
