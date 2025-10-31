@@ -1,6 +1,13 @@
 import allure
 
 from pages import BasePage
+from pages.helpers import (
+    assert_element_is_displayed_and_enabled,
+    assert_text,
+    assert_product_title,
+    assert_product_price,
+    assert_products_count,
+)
 
 
 class ProductPage(BasePage):
@@ -124,7 +131,7 @@ class ProductPage(BasePage):
 
     @allure.step('Assert Add to cart button is active')
     def assert_add_to_cart_button_is_active(self):
-        self.assert_element_is_displayed_and_enabled(self.add_to_cart_button)
+        assert_element_is_displayed_and_enabled(self.add_to_cart_button)
 
     @allure.step(
         'Assert breadcrumbs product title matches original product title'
@@ -132,12 +139,12 @@ class ProductPage(BasePage):
     def assert_breadcrumbs_product_title(self):
         actual_text = self.breadcrumbs_product_title
         expected_text = self.product_title
-        self.assert_text(actual_text, expected_text)
+        assert_text(actual_text, expected_text)
 
     @allure.step('Assert plus and minus buttons work')
     def assert_plus_and_minus_buttons_work(self):
-        self.assert_element_is_displayed_and_enabled(self.plus_button)
-        self.assert_element_is_displayed_and_enabled(self.minus_button)
+        assert_element_is_displayed_and_enabled(self.plus_button)
+        assert_element_is_displayed_and_enabled(self.minus_button)
 
         initial_quantity = int(self.product_quantity)
 
@@ -153,37 +160,37 @@ class ProductPage(BasePage):
         self.wait_for_quantity_load(2, 'decrease')
         self.assert_product_quantity(expected_quantity=initial_quantity)
 
-    @allure.step('Assert product title and price')
-    def assert_product_title_and_price(self, expected_title, expected_price):
-        actual_title = self.product_title
-        self.check_product_title(actual_title, expected_title)
-
-        actual_price = self.product_price
-        self.check_product_price(actual_price, expected_price)
-
     @allure.step('Assert product quantity')
     def assert_product_quantity(self, expected_quantity=1):
         actual_quantity = self.product_quantity
-        self.assert_products_count(actual_quantity, expected_quantity)
+        assert_products_count(actual_quantity, expected_quantity)
+
+    @allure.step('Assert product title and price')
+    def assert_product_title_and_price(self, expected_title, expected_price):
+        actual_title = self.product_title
+        assert_product_title(actual_title, expected_title)
+
+        actual_price = self.product_price
+        assert_product_price(actual_price, expected_price)
 
     @allure.step('Assert quantity input field is active')
     def assert_quantity_input_field_is_active(self):
-        self.assert_element_is_displayed_and_enabled(self.quantity_input_field)
+        assert_element_is_displayed_and_enabled(self.quantity_input_field)
 
     @allure.step('Assert terms_and_conditions')
     def assert_terms_and_conditions(self):
-        self.assert_text(
+        assert_text(
             self.terms_and_conditions_title,
             self.terms_and_conditions_title_expected,
         )
-        self.assert_text(
+        assert_text(
             self.terms_and_conditions_link,
             self.terms_and_conditions_link_expected,
         )
-        self.assert_element_is_displayed_and_enabled(
+        assert_element_is_displayed_and_enabled(
             self.terms_and_conditions_link_element
         )
-        self.assert_text(
+        assert_text(
             self.terms_and_conditions_texts,
             self.terms_and_conditions_texts_expected,
         )

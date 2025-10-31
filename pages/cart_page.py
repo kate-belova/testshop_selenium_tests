@@ -1,6 +1,12 @@
 import allure
 
 from pages import BasePage
+from pages.helpers import (
+    assert_text,
+    assert_product_title,
+    assert_products_count,
+    assert_product_price,
+)
 
 
 class CartPage(BasePage):
@@ -46,19 +52,6 @@ class CartPage(BasePage):
         return empty_cart_msg
 
     @property
-    def product_cart_title(self):
-        self.wait.until(
-            self.ec.visibility_of_element_located(
-                self.product_cart_title_locator
-            )
-        )
-        product_cart_title_element = self.find_element(
-            self.product_cart_title_locator
-        )
-        product_cart_title = product_cart_title_element.text.strip()
-        return product_cart_title
-
-    @property
     def product_cart_price(self):
         self.wait.until(
             self.ec.visibility_of_element_located(
@@ -70,6 +63,19 @@ class CartPage(BasePage):
         )
         product_cart_price = product_cart_price_element.text.strip()
         return product_cart_price
+
+    @property
+    def product_cart_title(self):
+        self.wait.until(
+            self.ec.visibility_of_element_located(
+                self.product_cart_title_locator
+            )
+        )
+        product_cart_title_element = self.find_element(
+            self.product_cart_title_locator
+        )
+        product_cart_title = product_cart_title_element.text.strip()
+        return product_cart_title
 
     @property
     def remove_cart_button(self):
@@ -89,19 +95,17 @@ class CartPage(BasePage):
 
     @allure.step('Assert empty cart message')
     def assert_empty_cart_message(self):
-        self.assert_text(
-            self.empty_cart_message, self.empty_cart_message_expected
-        )
+        assert_text(self.empty_cart_message, self.empty_cart_message_expected)
 
     @allure.step('Assert product title, quantity and price')
     def assert_product_cart_title_quantity_price(
         self, expected_title, expected_price, expected_quantity=1
     ):
         actual_title = self.product_cart_title
-        self.check_product_title(actual_title, expected_title)
+        assert_product_title(actual_title, expected_title)
 
         actual_quantity = int(self.product_quantity)
-        self.assert_products_count(actual_quantity, expected_quantity)
+        assert_products_count(actual_quantity, expected_quantity)
 
         cart_price_clean = self.product_cart_price.replace(',', '')
         actual_price = float(cart_price_clean)
@@ -112,7 +116,7 @@ class CartPage(BasePage):
         else:
             expected_price_float = float(expected_price)
 
-        self.check_product_price(actual_price, expected_price_float)
+        assert_product_price(actual_price, expected_price_float)
 
     @allure.step('Click Remove button in cart so to delete product')
     def remove_product_from_cart(self):
