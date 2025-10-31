@@ -1,11 +1,12 @@
 import allure
 import pytest
 
-# fmt: off
 from test_data import (
-    products_test_data, product_index, search_words, products_indexes
+    products_test_data,
+    product_index,
+    search_words,
+    products_indexes,
 )
-# fmt: on
 
 
 @pytest.mark.product_page
@@ -67,9 +68,7 @@ class TestProductPage:
     @pytest.mark.smoke
     @pytest.mark.parametrize('search_word', search_words)
     def test_product_page_search_success(
-        # fmt: off
         self, main_page, product_page, search_word
-        # fmt: on
     ):
         main_page.open_main_page()
         main_page.open_product_in_new_tab(products_indexes[0])

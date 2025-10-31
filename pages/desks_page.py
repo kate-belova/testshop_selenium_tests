@@ -3,6 +3,10 @@ import time
 import allure
 
 from pages import BasePage
+from pages.helpers import (
+    assert_search_counter_and_actual_amount_found,
+    assert_products_count,
+)
 
 
 class DesksPage(BasePage):
@@ -93,14 +97,14 @@ class DesksPage(BasePage):
     def assert_actual_desks_count_equals_the_one_in_counter(self):
         counter_number = self.desks_found_counter
         actual_count = len(self.desks_found)
-        self.assert_search_counter_and_actual_amount_found(
+        assert_search_counter_and_actual_amount_found(
             counter_number, actual_count
         )
 
     @allure.step('Assert desks count')
     def assert_found_desks_count(self, expected_count):
         actual_count = len(self.desks_found)
-        self.assert_products_count(actual_count, expected_count)
+        assert_products_count(actual_count, expected_count)
 
     @allure.step('Assert desks are sorted by name ascending')
     def assert_sorted_by_name_asc(self):

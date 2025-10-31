@@ -1,11 +1,12 @@
 import allure
 import pytest
 
-# fmt: off
 from test_data import (
-    search_words, sort_indexes, sort_verifications, price_test_data
+    search_words,
+    sort_indexes,
+    sort_verifications,
+    price_test_data,
 )
-# fmt: on
 
 
 @pytest.mark.desks

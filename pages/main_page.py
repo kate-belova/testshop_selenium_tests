@@ -1,6 +1,7 @@
 import allure
 
 from pages import BasePage
+from pages.helpers import get_expected_text_in_product_url_from_product_title
 
 
 class MainPage(BasePage):
@@ -45,19 +46,19 @@ class MainPage(BasePage):
             *self.hover_cart_button_locator
         )
 
-    def get_product_title(self, product):
-        self.wait.until(
-            self.ec.visibility_of_element_located(self.products_titles_locator)
-        )
-        product_title = product.find_element(*self.products_titles_locator)
-        return product_title.text.strip()
-
     def get_product_price(self, product):
         self.wait.until(
             self.ec.visibility_of_element_located(self.products_prices_locator)
         )
         product_price = product.find_element(*self.products_prices_locator)
         return product_price.text.strip()
+
+    def get_product_title(self, product):
+        self.wait.until(
+            self.ec.visibility_of_element_located(self.products_titles_locator)
+        )
+        product_title = product.find_element(*self.products_titles_locator)
+        return product_title.text.strip()
 
     @allure.step('Open Main page')
     def open_main_page(self, idx=None):
@@ -77,7 +78,7 @@ class MainPage(BasePage):
         self.product_url = self.browser.current_url
 
         self.expected_text_in_product_url = (
-            self.get_expected_text_in_product_url_from_product_title(
+            get_expected_text_in_product_url_from_product_title(
                 self.product_title
             )
         )
