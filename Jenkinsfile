@@ -1,54 +1,47 @@
 pipeline {
-    agent any
+	agent any
 
-    stages {
-        stage('Checkout') {
-            steps {
-                checkout scm
-            }
-        }
+	stages {
+		stage('Checkout') {
+			steps {
+				checkout scm
+			}
+		}
 
-        stage('Setup Python Environment') {
-            steps {
-                sh '''
-                    echo "Python version:"
-                    python3 --version
-
-                    echo "Chrome version:"
-                    google-chrome --version
-
+		stage('Setup Python Environment') {
+			steps {
+				sh '''
                     python3 -m venv venv
                     . venv/bin/activate
 
-                    echo "Installing project dependencies..."
                     pip install -r requirements.txt
                 '''
-            }
-        }
+			}
+		}
 
-        stage('Run Selenium Tests') {
-            steps {
-                sh '''
-                    . venv/bin/activate
-                    echo "Running Selenium tests with Chrome..."
-                    python -m pytest --alluredir=allure-results -v
+		stage('Run Tests') {
+			steps {
+				sh '''
+				. venv/bin/activate
+                pytest
                 '''
-            }
-        }
-    }
+			}
+		}
+	}
 
-    post {
-        always {
-            archiveArtifacts artifacts: 'allure-results/**/*', fingerprint: true
-            echo "Build completed with status: ${currentBuild.result}"
-        }
+	post {
+		always {
+			allure includeProperties: false,
+			jdk: '',
+			results: [[path: 'allure-results']]
+		}
 
-        success {
-            echo '✅ All Selenium tests passed successfully!'
-        }
+		success {
+			echo '✅ All tests passed successfully!'
+		}
 
-        failure {
-            echo '❌ Selenium tests failed!'
-        }
-    }
+		failure {
+			echo '❌ Tests failed!'
+		}
+	}
 }
