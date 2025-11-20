@@ -44,7 +44,7 @@ jobs:
         run: pytest
 
       - name: Run Cart page tests
-        if: github.event_name == 'workflow_dispatch' && github.event.inputs.deployment_target == 'cart_page_tests'
+        if: github.event_name == 'workflow_dispatch' && github.event.inputs.deployment_target == 'cart_tests'
         run: pytest -m cart
 
       - name: Run Desks page tests
