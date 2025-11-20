@@ -1,35 +1,112 @@
-name: testshop.qa-practice.com selenium tests
+name: Testshop Selenium tests
 
 on:
-  workflow_dispatch
+  push:
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      deployment_target:
+        description: Choose target
+        required: true
+        default: all_tests
+        type: choice
+        options:
+          - all_tests
+          - cart_tests
+          - desks_page_tests
+          - product_page_tests
+          - regression_tests
+          - smoke_tests
 
 jobs:
-  tests:
+  run-tests:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5
+
       - name: Setup Python
         uses: actions/setup-python@v6
         with:
           python-version: '3.13'
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-      - name: Run Testshop Selenium tests
+
+      - name: Run all tests for push/PR
+        if: github.event_name == 'push' || github.event_name == 'pull_request'
         run: pytest
 
-      - name: Install Allure CLI
-        run: sudo npm install -g allure-commandline --unsafe-perm=true
+      - name: Run all tests
+        if: github.event_name == 'workflow_dispatch' && github.event.inputs.deployment_target == 'all_tests'
+        run: pytest
 
-      - name: Generate Allure report
-        run: allure generate allure-results --clean -o allure-report
+      - name: Run Cart page tests
+        if: github.event_name == 'workflow_dispatch' && github.event.inputs.deployment_target == 'cart_page_tests'
+        run: pytest -m cart
 
-      - name: Deploy Allure report to GitHub Pages
+      - name: Run Desks page tests
+        if: github.event_name == 'workflow_dispatch' && github.event.inputs.deployment_target == 'desks_page_tests'
+        run: pytest -m desks
+
+      - name: Run Product page tests
+        if: github.event_name == 'workflow_dispatch' && github.event.inputs.deployment_target == 'product_page_tests'
+        run: pytest -m product_page
+
+      - name: Run regression tests
+        if: github.event_name == 'workflow_dispatch' && github.event.inputs.deployment_target == 'regression_tests'
+        run: pytest -m regression
+
+      - name: Run smoke tests
+        if: github.event_name == 'workflow_dispatch' && github.event.inputs.deployment_target == 'smoke_tests'
+        run: pytest -m smoke
+
+      - name: Upload Allure results as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-results
+          path: allure-results
+          retention-days: 1
+
+
+  publish-report:
+    runs-on: ubuntu-latest
+    needs: run-tests
+    if: always()
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+
+      - name: Download Allure results artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: allure-results
+          path: allure-results
+
+      - name: Get Allure history
+        uses: actions/checkout@v5
         if: always()
+        continue-on-error: true
+        with:
+          ref: gh-pages
+          path: gh-pages
+
+      - name: Generate Allure Report
+        uses: simple-elf/allure-report-action@master
+        if: always()
+        with:
+          allure_results: allure-results
+          gh_pages: gh-pages
+          keep_reports: 20
+
+      - name: Deploy report to Github Pages
         uses: peaceiris/actions-gh-pages@v4
+        if: always()
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./allure-report
           publish_branch: gh-pages
+          publish_dir: allure-history
+          force_orphan: false
