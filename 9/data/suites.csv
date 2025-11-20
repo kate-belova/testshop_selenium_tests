@@ -1,0 +1,5 @@
+"DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
+"","6424","Successfully add product to cart by hover button","tests","Thu Nov 20 18:53:37 UTC 2025","passed","Thu Nov 20 18:53:43 UTC 2025","TestCartPage","cart_tests","",""
+"","6406","Successfully add product to cart by hover button","tests","Thu Nov 20 18:53:37 UTC 2025","passed","Thu Nov 20 18:53:43 UTC 2025","TestCartPage","cart_tests","",""
+"","4033","Empty Cart page has all the necessary details","tests","Thu Nov 20 18:53:37 UTC 2025","passed","Thu Nov 20 18:53:41 UTC 2025","TestCartPage","cart_tests","",""
+"","1247","Successfully remove product from cart","tests","Thu Nov 20 18:53:43 UTC 2025","passed","Thu Nov 20 18:53:44 UTC 2025","TestCartPage","cart_tests","",""
